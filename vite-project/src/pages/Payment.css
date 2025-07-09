@@ -1,0 +1,481 @@
+.payment-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  padding: 20px;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Payment Header */
+.payment-header {
+  margin-bottom: 30px;
+}
+
+.payment-header h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.payment-header p {
+  color: #666;
+  font-size: 16px;
+}
+
+/* Payment Details */
+.payment-details {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span:first-child {
+  font-weight: 500;
+  color: #555;
+}
+
+.detail-row span:last-child {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Payment Actions */
+.payment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.btn-primary {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.btn-primary:hover {
+  background: #222;
+  color: #fff;
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.btn-primary:active {
+  background: #000;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.btn-secondary:hover {
+  background: #111;
+  color: #fff;
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.btn-secondary:active {
+  background: #000;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #111;
+  border: 2px solid #111;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-outline:hover {
+  background: #111;
+  color: #fff;
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.btn-outline:active {
+  background: #000;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+/* Payment Info */
+.payment-info {
+  background: #e8f4fd;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+
+.payment-info h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.payment-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.payment-info li {
+  padding: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error Message */
+.error-message {
+  color: #dc3545;
+  text-align: center;
+}
+
+.error-message h2 {
+  color: #dc3545;
+  margin-bottom: 15px;
+}
+
+.error-message p {
+  margin-bottom: 20px;
+}
+
+/* Success Card */
+.success-card {
+  border-left: 5px solid #28a745;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: #d4edda;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #28a745;
+}
+
+.success-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.success-content h1 {
+  color: #28a745;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.success-content p {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.payment-summary {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.payment-summary h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.success-message {
+  background: #d4edda;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.success-message h3 {
+  color: #155724;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.success-message ul {
+  list-style: none;
+  padding: 0;
+}
+
+.success-message li {
+  padding: 8px 0;
+  color: #155724;
+  font-size: 14px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Cancel Card */
+.cancel-card {
+  border-left: 5px solid #dc3545;
+}
+
+.cancel-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: #f8d7da;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+}
+
+.cancel-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.cancel-content h1 {
+  color: #dc3545;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.cancel-content p {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.cancel-info {
+  background: #f8d7da;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.cancel-info h3 {
+  color: #721c24;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.cancel-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cancel-info li {
+  padding: 8px 0;
+  color: #721c24;
+  font-size: 14px;
+}
+
+.help-section {
+  background: #e2e3e5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.help-section h3 {
+  color: #495057;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.help-section p {
+  color: #6c757d;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.contact-info {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.contact-info p {
+  margin: 8px 0;
+  color: #495057;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 10px;
+  }
+  
+  .payment-card {
+    padding: 20px;
+  }
+  
+  .payment-header h2 {
+    font-size: 24px;
+  }
+  
+  .success-content h1,
+  .cancel-content h1 {
+    font-size: 28px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
+/* Network International Branding */
+.network-international-brand {
+  background: black;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.network-international-brand img {
+  width: 30px;
+  height: 30px;
+}
+
+.network-international-brand span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Services Breakdown */
+.services-breakdown {
+  margin: 15px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.services-breakdown h4 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-name {
+  font-size: 14px;
+  color: #495057;
+  flex: 1;
+}
+
+.service-price {
+  font-size: 14px;
+  color: #101010;
+  font-weight: 600;
+}
+
