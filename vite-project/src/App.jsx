@@ -44,7 +44,7 @@ import PaymentCancel from "./pages/PaymentCancel";
 
 // Import authentication components
 import { AuthProvider } from "./Service/Context";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute";
 import ProfilePage from './pages/ProfilePage';
 import OrdersPage from './pages/OrdersPage';
 
