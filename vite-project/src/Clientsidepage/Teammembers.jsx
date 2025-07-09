@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TeamMembers.css';
+import './Teammembers.css';
 import { FiSearch, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
 import { FaStar } from 'react-icons/fa';
 import { MdKeyboardArrowDown } from 'react-icons/md';
