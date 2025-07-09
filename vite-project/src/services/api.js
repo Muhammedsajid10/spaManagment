@@ -1,5 +1,5 @@
 // API service for spa backend
-const API_BASE_URL = 'http://localhost:3000/api/v1';
+const API_BASE_URL = 'https://spamanagment.onrender.com/api/v1';
 
 // Helper function to handle API responses
 const handleResponse = async (response) => {
