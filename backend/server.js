@@ -18,7 +18,8 @@ const connectDB = require('./config/db');
 
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://localhost:5173', 
+   origin: 'https://spamanagment-1.onrender.com', 
+  // origin: 'http://localhost:5173', 
   credentials: true //  if using cookies/auth headers
 }));
 
