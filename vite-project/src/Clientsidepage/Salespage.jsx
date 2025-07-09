@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiChevronDown, FiCalendar, FiFilter, FiPlus, FiChevronLeft } from 'react-icons/fi';
-import './SalesPage.css';
+import './Salespage.css';
 
 const SalesPage = () => {
   return (
