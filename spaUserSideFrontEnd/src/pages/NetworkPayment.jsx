@@ -35,7 +35,7 @@ const NetworkPayment = () => {
       setLoading(true);
       setError('');
 
-      const response = await fetch('http://localhost:3000/api/v1/payments/create', {
+      const response = await fetch('https://spamanagment.onrender.com/api/v1/payments/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const NetworkPayment = () => {
 
   const checkPaymentStatus = async (paymentId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/payments/status/${paymentId}`, {
+      const response = await fetch(`https://spamanagment.onrender.com/api/v1/payments/status/${paymentId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

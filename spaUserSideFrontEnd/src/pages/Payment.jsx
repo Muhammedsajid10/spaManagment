@@ -113,7 +113,7 @@ const Payment = () => {
       
       console.log('Sending booking data to API:', bookingData);
       
-      const response = await fetch('http://localhost:3000/api/v1/bookings', {
+      const response = await fetch('https://spamanagment.onrender.com/api/v1/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ const Payment = () => {
 
   const fetchAvailableGateways = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/payments/gateways/available', {
+      const response = await fetch('https://spamanagment.onrender.com/api/v1/payments/gateways/available', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

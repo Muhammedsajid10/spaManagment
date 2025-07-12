@@ -6,7 +6,7 @@ export default function VerifyEmailPage() {
   const [status, setStatus] = useState('Verifying your email...');
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/v1/auth/verify-email/${token}`, {
+    fetch(`https://spamanagment.onrender.com/api/v1/auth/verify-email/${token}`, {
       method: 'PATCH',
     })
       .then(res => res.json())

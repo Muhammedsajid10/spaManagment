@@ -1,0 +1,35 @@
+.sb-sidebar {
+  width: 60px;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  height: 100vh;
+}
+
+.sb-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  margin: 10px 0;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s, color 0.3s;
+  text-decoration: none;
+}
+
+.sb-icon-wrapper:hover {
+  background-color: #333;
+}
+
+/* .sb-icon-wrapper.sb-active {
+  background-color: #7a5af8;
+} */
+
+.sb-icon {
+  font-size: 18px;
+}

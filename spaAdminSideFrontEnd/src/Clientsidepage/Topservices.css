@@ -1,0 +1,67 @@
+.top-stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Card Style Matching Graphs and Appointments */
+.stats-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  flex: 1 1 450px;   /* Minimum width for responsive layout */
+  max-width: 680px;  /* Match card width in Graphs */
+  min-width: 280px;
+}
+
+/* Title */
+.stats-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* Table Layout */
+.stats-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header and Data Rows */
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.stats-header {
+  font-weight: bold;
+  color: #555;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Table Cells */
+.stats-cell {
+  flex: 1;
+  text-align: left;
+  font-size: 17px;
+  padding: 0 8px;
+}
+
+.stats-cell:last-child {
+  border-right: none;
+}
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+  .top-stats-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
