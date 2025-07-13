@@ -496,10 +496,17 @@ const completeBooking = async (req, res) => {
 const getAllBookings = async (req, res) => {
   try {
     const bookings = await Booking.find()
-      .populate('userId', 'firstName lastName email')
-      .populate('serviceId', 'name price')
-      .populate('employeeId', 'user position')
-      .sort({ date: -1 });
+      .populate('client', 'firstName lastName email')
+      .populate('services.service', 'name price')
+      .populate({
+        path: 'services.employee',
+        select: 'employeeId user',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName'
+        }
+      })
+      .sort({ appointmentDate: -1 });
 
     res.json({
       success: true,
