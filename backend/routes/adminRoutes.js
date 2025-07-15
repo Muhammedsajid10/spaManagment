@@ -3,6 +3,7 @@ const adminController = require('../controllers/adminController');
 const clientController = require('../controllers/clientController');
 const { protect } = require('../middleware/authMiddleware');
 const { isAdmin, isStaff, logUserAction } = require('../middleware/roleMiddleware');
+const { getCashMovementSummary } = require('../controllers/paymentController');
 
 const router = express.Router();
 
@@ -16,6 +17,9 @@ router.get('/analytics/bookings', isStaff, adminController.getBookingAnalytics);
 router.get('/analytics/employees', isStaff, adminController.getEmployeeAnalytics);
 router.get('/analytics/customers', isStaff, adminController.getCustomerAnalytics);
 router.get('/system/health', isAdmin, adminController.getSystemHealth);
+
+// Cash Movement Summary
+router.get('/cash-movement-summary', isStaff, getCashMovementSummary);
 
 // Data export routes (admin only)
 router.get('/export', isAdmin, adminController.exportData);

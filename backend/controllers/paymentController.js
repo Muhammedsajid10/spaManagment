@@ -394,6 +394,43 @@ const paymentCancel = catchAsync(async (req, res, next) => {
   });
 });
 
+// Cash Movement Summary for a given date
+const getCashMovementSummary = async (req, res) => {
+  const { date } = req.query; // Expecting YYYY-MM-DD
+  if (!date) {
+    return res.status(400).json({ success: false, message: 'Date is required in YYYY-MM-DD format' });
+  }
+  const start = new Date(date + 'T00:00:00.000Z');
+  const end = new Date(date + 'T23:59:59.999Z');
+
+  try {
+    // Aggregate payments by paymentMethod and status
+    const payments = await Payment.aggregate([
+      { $match: { createdAt: { $gte: start, $lte: end } } },
+      {
+        $group: {
+          _id: { paymentMethod: "$paymentMethod", status: "$status" },
+          total: { $sum: "$amount" }
+        }
+      }
+    ]);
+
+    // Format the result
+    const summary = {};
+    payments.forEach(item => {
+      const method = item._id.paymentMethod;
+      const status = item._id.status;
+      if (!summary[method]) summary[method] = { paymentsCollected: 0, refundsPaid: 0 };
+      if (status === "completed") summary[method].paymentsCollected += item.total / 100;
+      if (status === "refunded") summary[method].refundsPaid += item.total / 100;
+    });
+
+    res.json({ success: true, data: summary });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to fetch cash movement summary', error: err.message });
+  }
+};
+
 module.exports = {
   createPayment,
   confirmPayment,
@@ -404,5 +441,6 @@ module.exports = {
   getAvailableGateways,
   handleNetworkInternationalWebhook,
   paymentSuccess,
-  paymentCancel
+  paymentCancel,
+  getCashMovementSummary
 }; 
