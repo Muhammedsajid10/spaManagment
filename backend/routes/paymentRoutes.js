@@ -1,6 +1,7 @@
 const express = require('express');
 const paymentController = require('../controllers/paymentController');
 const { protect } = require('../middleware/authMiddleware');
+const { isAdmin } = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
@@ -24,5 +25,8 @@ router.get('/cancel', paymentController.paymentCancel);
 
 // Webhook endpoints (no authentication required)
 router.post('/webhook/network_international', paymentController.handleNetworkInternationalWebhook);
+
+// Admin: get all payments
+router.get('/admin/all', isAdmin, paymentController.getAllPayments);
 
 module.exports = router; 
