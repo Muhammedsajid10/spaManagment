@@ -431,6 +431,28 @@ const getCashMovementSummary = async (req, res) => {
   }
 };
 
+// Get all payments (admin only)
+const getAllPayments = catchAsync(async (req, res, next) => {
+  const { page = 1, limit = 50 } = req.query;
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+  const payments = await Payment.find()
+    .populate('user', 'firstName lastName email')
+    .populate({
+      path: 'booking',
+      select: 'bookingNumber appointmentDate status',
+    })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(parseInt(limit));
+  const total = await Payment.countDocuments();
+  res.status(200).json({
+    success: true,
+    results: payments.length,
+    total,
+    data: { payments }
+  });
+});
+
 module.exports = {
   createPayment,
   confirmPayment,
@@ -442,5 +464,6 @@ module.exports = {
   handleNetworkInternationalWebhook,
   paymentSuccess,
   paymentCancel,
-  getCashMovementSummary
+  getCashMovementSummary,
+  getAllPayments // <-- export new function
 }; 
