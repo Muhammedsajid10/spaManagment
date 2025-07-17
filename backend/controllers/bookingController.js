@@ -255,92 +255,78 @@ const createBookingConfirmation = async (req, res) => {
 // Create booking
 const createBooking = async (req, res) => {
   try {
-    const { services, appointmentDate, notes } = req.body;
-    const userId = req.user._id;
+    const { services, appointmentDate, notes, paymentMethod, client: clientData } = req.body;
+    const adminId = req.user.id; // Admin creating the booking
 
-    if (!services || !Array.isArray(services) || services.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'At least one service is required'
-      });
+    if (!services || !services.length) {
+      return res.status(400).json({ message: 'At least one service is required' });
     }
 
-    // Validate services data
-    for (const serviceData of services) {
-      if (!serviceData.serviceId || !serviceData.employeeId || !serviceData.startTime || !serviceData.endTime) {
-        return res.status(400).json({
-          success: false,
-          message: 'Each service must have serviceId, employeeId, startTime, and endTime'
+    // Find or create the client user
+    let clientUser;
+    if (clientData && clientData.email) {
+      clientUser = await User.findOne({ email: clientData.email });
+
+      if (!clientUser) {
+        // Create a new user for the client
+        const [firstName, ...lastNameParts] = clientData.name.split(' ');
+        const lastName = lastNameParts.join(' ');
+
+        clientUser = new User({
+          firstName,
+          lastName,
+          email: clientData.email,
+          phone: clientData.phone,
+          password: 'defaultPassword123', // A temporary default password
+          role: 'client',
+          isVerified: true, // Or false, depending on your flow
         });
+        await clientUser.save();
       }
+    } else {
+      // If no client data, maybe default to the admin or throw error
+      return res.status(400).json({ message: 'Client information is required' });
     }
 
-    // Calculate totals
-    let totalDuration = 0;
-    let totalAmount = 0;
+    const totalAmount = services.reduce((acc, s) => acc + (s.price || 0), 0);
 
-    // Prepare services array for the booking
-    const bookingServices = [];
-    for (const serviceData of services) {
-      // Get service details to calculate price and duration
-      const service = await Service.findById(serviceData.serviceId);
-      if (!service) {
-        return res.status(404).json({
-          success: false,
-          message: `Service with ID ${serviceData.serviceId} not found`
-        });
-      }
-
-      totalDuration += service.duration;
-      totalAmount += service.effectivePrice || service.price;
-
-      bookingServices.push({
-        service: serviceData.serviceId,
-        employee: serviceData.employeeId,
-        price: service.effectivePrice || service.price,
-        duration: service.duration,
-        startTime: new Date(serviceData.startTime),
-        endTime: new Date(serviceData.endTime),
-        status: 'scheduled',
-        notes: serviceData.notes || ''
-      });
-    }
-
-    // Generate booking number
-    const bookingNumber = generateConfirmationId();
-
-    // Create the booking
-    const booking = new Booking({
-      bookingNumber,
-      client: userId,
-      services: bookingServices,
-      appointmentDate: new Date(appointmentDate),
-      totalDuration,
+    const newBooking = new Booking({
+      client: clientUser._id,
+      services,
+      appointmentDate,
       totalAmount,
-      finalAmount: totalAmount, // No discount/tax for now
-      status: 'pending',
-      clientNotes: notes,
-      bookingSource: 'website'
+      paymentMethod,
+      status: 'confirmed',
+      notes,
+      bookedBy: adminId,
     });
 
-    await booking.save();
+    await newBooking.save();
 
-    // Populate the booking with service and employee details
-    await booking.populate([
-      { path: 'services.service', select: 'name price duration' },
-      { path: 'services.employee', select: 'user position', populate: { path: 'user', select: 'firstName lastName' } }
-    ]);
+    const populatedBooking = await Booking.findById(newBooking._id)
+      .populate('client', 'firstName lastName email phone')
+      .populate({
+        path: 'services.service',
+        model: 'Service',
+      })
+      .populate({
+        path: 'services.employee',
+        model: 'Employee',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: 'firstName lastName',
+        },
+      });
 
     res.status(201).json({
       success: true,
-      data: { booking }
+      message: 'Booking created successfully',
+      data: { booking: populatedBooking },
     });
   } catch (error) {
     console.error('Error creating booking:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to create booking'
-    });
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 };
 
