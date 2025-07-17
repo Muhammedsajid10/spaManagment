@@ -178,16 +178,16 @@ const deleteClient = catchAsync(async (req, res, next) => {
   if (activeBookings.length > 0) {
     return res.status(400).json({
       success: false,
-      message: 'Cannot deactivate client with active bookings'
+      message: 'Cannot delete client with active bookings'
     });
   }
 
-  // Deactivate instead of delete
-  await User.findByIdAndUpdate(req.params.id, { isActive: false });
+  // Hard delete - remove from database
+  await User.findByIdAndDelete(req.params.id);
 
   res.status(204).json({
     success: true,
-    message: 'Client deactivated successfully',
+    message: 'Client deleted successfully',
     data: null
   });
 });
