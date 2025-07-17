@@ -36,6 +36,65 @@ async function sendVerificationEmail(email, token) {
   await transporter.sendMail(mailOptions);
 }
 
+// Utility to send welcome email to employee
+async function sendWelcomeEmail(email, password) {
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || 'no-reply@spa.com',
+    to: email,
+    subject: 'Welcome to Our Spa - Your Login Details',
+    html: `<h2>Welcome to Our Spa!</h2>
+      <p>Your account has been created. Here are your login details:</p>
+      <ul>
+        <li><b>Email:</b> ${email}</li>
+        <li><b>Password:</b> ${password}</li>
+      </ul>
+      <p><a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/login">Login here</a></p>
+      <p>Please change your password after your first login.</p>`
+  };
+  await transporter.sendMail(mailOptions);
+}
+
+// Utility to send welcome+verification email to employee
+async function sendEmployeeWelcomeVerificationEmail(email, password, verificationToken) {
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  const verifyUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email/${verificationToken}`;
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || 'no-reply@spa.com',
+    to: email,
+    subject: 'Welcome to Our Spa Team - Verify Your Email & Login Details',
+    html: `<h2>Welcome to Our Spa Team!</h2>
+      <p>Your employee account has been created. Here are your login details:</p>
+      <ul>
+        <li><b>Email:</b> ${email}</li>
+        <li><b>Password:</b> ${password}</li>
+      </ul>
+      <p><b>Please verify your email to activate your staff account:</b></p>
+      <a href="${verifyUrl}">${verifyUrl}</a>
+      <p>After verifying, you can <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/login">login here</a>.</p>
+      <p><i>Please change your password after your first login.</i></p>`
+  };
+  await transporter.sendMail(mailOptions);
+}
+
 // Register a new user
 const signup = catchAsync(async (req, res, next) => {
   const {
@@ -87,21 +146,26 @@ const signup = catchAsync(async (req, res, next) => {
     role: role === 'admin' ? 'client' : role // Prevent admin creation through signup
   });
 
-  // Generate email verification token (if email verification is enabled)
+  let verificationToken;
   if (process.env.EMAIL_VERIFICATION_ENABLED === 'true') {
-    const verificationToken = crypto.randomBytes(32).toString('hex');
+    verificationToken = crypto.randomBytes(32).toString('hex');
     newUser.emailVerificationToken = crypto
       .createHash('sha256')
       .update(verificationToken)
       .digest('hex');
-    
     await newUser.save({ validateBeforeSave: false });
-
-    // TODO: Send verification email
-    await sendVerificationEmail(newUser.email, verificationToken);
   } else {
     newUser.isEmailVerified = true;
     await newUser.save({ validateBeforeSave: false });
+  }
+
+  // Send customized welcome+verification email to employee
+  if (role === 'employee') {
+    if (process.env.EMAIL_VERIFICATION_ENABLED === 'true') {
+      await sendEmployeeWelcomeVerificationEmail(email, password, verificationToken);
+    } else {
+      await sendWelcomeEmail(email, password);
+    }
   }
 
   createSendToken(newUser, 201, req, res, 'User registered successfully');
