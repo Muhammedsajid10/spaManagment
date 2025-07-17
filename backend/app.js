@@ -16,6 +16,8 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const membershipRoutes = require('./routes/membershipRoutes');
+
 
 // Import middleware
 const { isLoggedIn } = require('./middleware/authMiddleware');
@@ -130,6 +132,7 @@ app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/employees', employeeRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/memberships', membershipRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
