@@ -396,10 +396,21 @@ const paymentCancel = catchAsync(async (req, res, next) => {
 
 // Cash Movement Summary for a given date
 const getCashMovementSummary = async (req, res) => {
-  const { date } = req.query; // Expecting YYYY-MM-DD
+  let { date } = req.query; // Expecting YYYY-MM-DD
+  
+  // If no date provided, use today's date
   if (!date) {
-    return res.status(400).json({ success: false, message: 'Date is required in YYYY-MM-DD format' });
+    date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
   }
+  
+  // Validate date format
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Date must be in YYYY-MM-DD format' 
+    });
+  }
+  
   const start = new Date(date + 'T00:00:00.000Z');
   const end = new Date(date + 'T23:59:59.999Z');
 
@@ -425,8 +436,9 @@ const getCashMovementSummary = async (req, res) => {
       if (status === "refunded") summary[method].refundsPaid += item.total / 100;
     });
 
-    res.json({ success: true, data: summary });
+    res.json({ success: true, data: summary, date: date });
   } catch (err) {
+    console.error('Cash movement summary error:', err);
     res.status(500).json({ success: false, message: 'Failed to fetch cash movement summary', error: err.message });
   }
 };
