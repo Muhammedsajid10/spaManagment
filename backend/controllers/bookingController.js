@@ -297,17 +297,42 @@ const createBooking = async (req, res) => {
     }
 
     const totalAmount = services.reduce((acc, s) => acc + (s.price || 0), 0);
+    const totalDuration = services.reduce((acc, s) => acc + (s.duration || 0), 0);
 
     const newBooking = new Booking({
       client: clientUser._id,
       services,
       appointmentDate,
-      totalAmount,
+      totalAmount: totalAmount,
+      totalDuration: totalDuration,
       paymentMethod,
       status: 'confirmed',
       notes,
       bookedBy: adminId,
     });
+
+    // Ensure finalAmount is set (pre-save will also calculate it, but set here for validation)
+    if (!newBooking.finalAmount) {
+      newBooking.finalAmount = newBooking.totalAmount - (newBooking.discountAmount || 0) + (newBooking.taxAmount || 0);
+    }
+
+    // Ensure bookingNumber is set (in case pre-save hook is not triggered)
+    if (!newBooking.bookingNumber) {
+      const date = new Date();
+      const year = date.getFullYear().toString().slice(-2);
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      // Find the last booking of the day
+      const lastBooking = await Booking.findOne({
+        bookingNumber: new RegExp(`^BK${year}${month}${day}`)
+      }).sort({ bookingNumber: -1 });
+      let sequence = 1;
+      if (lastBooking) {
+        const lastSequence = parseInt(lastBooking.bookingNumber.slice(-4));
+        sequence = lastSequence + 1;
+      }
+      newBooking.bookingNumber = `BK${year}${month}${day}${sequence.toString().padStart(4, '0')}`;
+    }
 
     await newBooking.save();
 
