@@ -269,8 +269,16 @@ const createBooking = async (req, res) => {
 
       if (!clientUser) {
         // Create a new user for the client
-        const [firstName, ...lastNameParts] = clientData.name.split(' ');
-        const lastName = lastNameParts.join(' ');
+        let firstName = '';
+        let lastName = '';
+        if (clientData.name) {
+          const parts = clientData.name.split(' ');
+          firstName = parts[0];
+          lastName = parts.slice(1).join(' ');
+        } else {
+          firstName = clientData.firstName || '';
+          lastName = clientData.lastName || '';
+        }
 
         clientUser = new User({
           firstName,
